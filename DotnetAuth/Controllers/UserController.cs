@@ -29,7 +29,7 @@ namespace DotnetAuth.Controllers
         }
 
         [HttpPost("RegisterUser")]
-        public async Task<object> RegisterUser([FromBody] UserDTO userDTO)
+        public async Task<object> RegisterUser([FromBody] RegisterDTO userDTO)
         {
             try
             {
