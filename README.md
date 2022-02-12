@@ -20,4 +20,6 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 6. ``dotnet ef migrations add InitialMigration -o "Data/Migrations"``
 7. ``dotnet ef database update``
 8. Create a ``UserController`` with ``UserManager`` and ``SignInManager`` injected.
+9. Add ``UserDTO`` class
+10. Add ``RegisterUser`` method in ``UserController``.
 
