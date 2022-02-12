@@ -68,5 +68,35 @@ namespace DotnetAuth.Controllers
                 return await Task.FromResult(ex.Message);
             }
         }
+
+        [HttpPost("Login")]
+        public async Task<object> Login([FromBody] LoginDTO loginDTO)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(loginDTO.Email))
+                {
+                    return await Task.FromResult("Email is required.");
+                }
+                else if (string.IsNullOrEmpty(loginDTO.Password))
+                {
+                    return await Task.FromResult("Password is required.");
+                }
+
+                Microsoft.AspNetCore.Identity.SignInResult result 
+                = await _signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, false, false);
+
+                if (result.Succeeded)
+                {
+                    return await Task.FromResult("Login Successfully.");
+                }
+
+                return await Task.FromResult("Invalid Email or Password");
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult(ex.Message);
+            }
+        }
     }
 }
