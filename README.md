@@ -22,4 +22,6 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 8. Create a ``UserController`` with ``UserManager`` and ``SignInManager`` injected.
 9. Add ``RegisterDTO`` class
 10. Add ``RegisterUser`` method in ``UserController``.
+11. Add ``UserDTO`` class
+12. Add ``GetAllUser`` method in ``UserController``.
 

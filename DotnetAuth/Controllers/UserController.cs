@@ -53,5 +53,20 @@ namespace DotnetAuth.Controllers
                 return await Task.FromResult(ex.Message);
             }
         }
+
+        [HttpGet("GetAllUser")]
+        public async Task<object> GetAllUser()
+        {
+            try
+            {
+                var users = _userManager.Users
+                .Select(x => new UserDTO(x.FullName, x.Email, x.UserName, x.DateCreated, x.DateModified));
+                return await Task.FromResult(users);
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult(ex.Message);
+            }
+        }
     }
 }
