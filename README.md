@@ -19,4 +19,5 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 5. Add ``AddDbContext`` and ``AddIdentity`` services in ``ConfigureServices`` method in ``Startup.cs`` class.
 6. ``dotnet ef migrations add InitialMigration -o "Data/Migrations"``
 7. ``dotnet ef database update``
+8. Create a ``UserController`` with ``UserManager`` and ``SignInManager`` injected.
 
