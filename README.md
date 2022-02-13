@@ -36,4 +36,5 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 22. Add ``GenerateToken`` method in ``UserController``.
 23. Add ``Token`` Property in ``UserDTO`` class.
 24. Modify ``Login`` method in ``UserController`` for returning user.
+25. Create ``Angular`` project with bootstrap simple navbar.
 
