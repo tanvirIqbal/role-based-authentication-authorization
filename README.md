@@ -27,4 +27,13 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 13. Add ``LoginDTO`` class
 14. Add ``Login`` method in ``UserController``.
 15. Install ``Microsoft.AspNetCore.Authentication.JwtBearer`` nuget package.
+16. Add ``JWTConfig`` object in ``appsettings.json`` file.
+17. Add ``AddAuthentication`` service in ``ConfigureServices`` method in ``Startup.cs`` class.
+18. Create ``JWTConfig.cs`` class that matches the name and properties from ``JWTConfig`` object in ``appsettings.json`` file.
+19. Map ``JWTConfig.cs`` class and ``JWTConfig`` JSON object from ``appsettings.json`` file in ``Startup.cs`` class.
+20. Add ``app.UseAuthentication();`` middleware in ``Configure`` method in ``Startup.cs`` class.
+21. Inject ``JWTConfig`` class in ``UserController``
+22. Add ``GenerateToken`` method in ``UserController``.
+23. Add ``Token`` Property in ``UserDTO`` class.
+24. Modify ``Login`` method in ``UserController`` for returning user.
 
