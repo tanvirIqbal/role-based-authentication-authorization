@@ -26,4 +26,5 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 12. Add ``GetAllUser`` method in ``UserController``.
 13. Add ``LoginDTO`` class
 14. Add ``Login`` method in ``UserController``.
+15. Install ``Microsoft.AspNetCore.Authentication.JwtBearer`` nuget package.
 
