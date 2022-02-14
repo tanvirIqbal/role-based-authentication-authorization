@@ -37,4 +37,9 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 23. Add ``Token`` Property in ``UserDTO`` class.
 24. Modify ``Login`` method in ``UserController`` for returning user.
 25. Create ``Angular`` project with bootstrap simple navbar.
+26. Create a login component ``ng g c login --skip-tests``
+27. Add login route to ``app-routing.module.ts`` 
+28. Design Login forms
+29. Import ``FormsModule``, ``ReactiveFormsModule``, ``HttpClientModule`` in ``app.module.ts``.
+30. Make login form semi-functional with ``ReactiveForm``.
 
