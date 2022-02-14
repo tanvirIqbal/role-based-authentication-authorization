@@ -42,4 +42,9 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 28. Design Login forms
 29. Import ``FormsModule``, ``ReactiveFormsModule``, ``HttpClientModule`` in ``app.module.ts``.
 30. Make login form semi-functional with ``ReactiveForm``.
+31. Create a register component ``ng g c register --skip-tests``
+32. Add register route to ``app-routing.module.ts`` 
+33. Design register forms
+34. Make register form semi-functional with ``ReactiveForm``.
+35. Add ``Login`` and ``Register`` button in the nav bar with ``routerLink`` attribute.
 
