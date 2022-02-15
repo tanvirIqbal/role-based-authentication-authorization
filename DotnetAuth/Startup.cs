@@ -24,6 +24,7 @@ namespace DotnetAuth
 {
     public class Startup
     {
+        private readonly string _corsPolicy = "CROSPOLICY";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -54,6 +55,13 @@ namespace DotnetAuth
                     ValidAudience = audience
                 };
             });
+            services.AddCors(opt => {
+                opt.AddPolicy(_corsPolicy, builder => {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                });
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -72,7 +80,7 @@ namespace DotnetAuth
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors(_corsPolicy);
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

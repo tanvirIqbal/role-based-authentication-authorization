@@ -47,4 +47,8 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 33. Design register forms
 34. Make register form semi-functional with ``ReactiveForm``.
 35. Add ``Login`` and ``Register`` button in the nav bar with ``routerLink`` attribute.
+36. Create a user service ``ng g s user --skip-tests``
+37. Add ``login`` and ``register`` methods in user service.
+38. Enable CROS in ``Startup.cs`` by adding ``AddCors`` service in ``ConfigureServices`` method and ``app.UseCors();`` middleware in ``Configure`` method.
+39. In register component modify ``onSubmit()`` method with user service.
 
