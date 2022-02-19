@@ -9,19 +9,19 @@ import { UserService } from '../_services/user.service';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private formBuilder:FormBuilder,
+  constructor(private formBuilder: FormBuilder,
     private userService: UserService) { }
 
   registerForm = this.formBuilder.group({
-    fullName:['',Validators.required],
-    email:['',[Validators.email,Validators.required]],
-    password:['',Validators.required]
+    fullName: ['', Validators.required],
+    email: ['', [Validators.email, Validators.required]],
+    password: ['', Validators.required]
   });
 
   ngOnInit(): void {
   }
 
-  onSubmit(){
+  onSubmit() {
     let fullName = this.registerForm.controls["fullName"].value;
     let email = this.registerForm.controls["email"].value;
     let password = this.registerForm.controls["password"].value;
@@ -34,8 +34,8 @@ export class RegisterComponent implements OnInit {
       },
       complete: () => {
         console.info('complete');
-      } 
-  })
+      }
+    })
     console.log("Register.");
   }
 

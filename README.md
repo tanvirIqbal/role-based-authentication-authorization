@@ -51,4 +51,7 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 37. Add ``login`` and ``register`` methods in user service.
 38. Enable CROS in ``Startup.cs`` by adding ``AddCors`` service in ``ConfigureServices`` method and ``app.UseCors();`` middleware in ``Configure`` method.
 39. In register component modify ``onSubmit()`` method with user service.
+40. Create a custom response model class ``ResponseModel.cs`` with ``Code``, ``Message``, ``DataSet`` properties.
+41. In user controller, return the ``ResponsModel`` in every methods.
+42. In login component modify ``onSubmit()`` method with user service.
 

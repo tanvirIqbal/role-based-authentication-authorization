@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using DotnetAuth.Data;
 using DotnetAuth.Data.Entitites;
 using DotnetAuth.DTOs;
 using DotnetAuth.Models;
@@ -55,13 +56,13 @@ namespace DotnetAuth.Controllers
 
                 if (result.Succeeded)
                 {
-                    return await Task.FromResult("User has been created.");
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Ok,"User has been created.",null));
                 }
-                return await Task.FromResult(string.Join(',', result.Errors.Select(x => x.Description).ToArray()));
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error,string.Join(',', result.Errors.Select(x => x.Description).ToArray()),null));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(ex.Message);
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error,ex.Message,null));
             }
         }
 
@@ -73,11 +74,11 @@ namespace DotnetAuth.Controllers
             {
                 var users = _userManager.Users
                 .Select(x => new UserDTO(x.FullName, x.Email, x.UserName, x.DateCreated, x.DateModified));
-                return await Task.FromResult(users);
+                return await Task.FromResult(new ResponseModel(ResponseCode.Ok,"Get All Users.",users));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(ex.Message);
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error,ex.Message,null));
             }
         }
 
@@ -88,11 +89,11 @@ namespace DotnetAuth.Controllers
             {
                 if (string.IsNullOrEmpty(loginDTO.Email))
                 {
-                    return await Task.FromResult("Email is required.");
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error,"Email is required.",null));
                 }
                 else if (string.IsNullOrEmpty(loginDTO.Password))
                 {
-                    return await Task.FromResult("Password is required.");
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error,"Password is required.",null));
                 }
 
                 Microsoft.AspNetCore.Identity.SignInResult result
@@ -103,14 +104,13 @@ namespace DotnetAuth.Controllers
                     AppUser appUser = await _userManager.FindByEmailAsync(loginDTO.Email);
                     UserDTO user = new UserDTO(appUser.FullName, appUser.Email,appUser.Email,appUser.DateCreated, appUser.DateModified);
                     user.Token = GenerateToken(appUser);
-                    return await Task.FromResult(user);
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Ok,"Login successfull.",user));
                 }
-
-                return await Task.FromResult("Invalid Email or Password");
+                return await Task.FromResult(new ResponseModel(ResponseCode.Ok,"Invalid Email or Password.",null));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(ex.Message);
+                return await Task.FromResult(new ResponseModel(ResponseCode.Ok,ex.Message,null));
             }
         }
 
