@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
 
-  private readonly baseUrl:string = "https://localhost:5001/api/"
+  private readonly baseUrl:string = "https://localhost:5001/api/user/"
   constructor(private httpClient:HttpClient) { }
 
   login(email:string, password: string){
