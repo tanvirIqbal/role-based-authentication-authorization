@@ -62,3 +62,5 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 48. Modify login component's ``onSubmit`` method with ``localStorage`` and ``router``.
 49. Add ``getAllUser`` method in user service with header.
 50. In user-management component call the ``getAllUser`` method to get the user list and bind the list to the bootstrap table in the html file.
+51. Add a ``Logout`` button in the nav bar and clear the ``localStorage`` and go to ``Login`` when the ``Logout`` button is clicked.
+52. Hide ``Register``, ``Logout`` and ``User Management`` button from the nav bar when user is logged out.

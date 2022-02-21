@@ -7,4 +7,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'WebAuth';
+  onLogout() {
+    localStorage.removeItem("userInfo");
+  }
+
+  get isUserLoggedIn() {
+    const userInfo = localStorage.getItem("userInfo");
+    return userInfo && userInfo.length > 0;
+  }
 }
