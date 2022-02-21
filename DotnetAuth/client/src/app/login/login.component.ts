@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -10,7 +11,8 @@ import { UserService } from '../_services/user.service';
 export class LoginComponent implements OnInit {
 
   constructor(private formBuilder:FormBuilder,
-    private userService: UserService) { }
+    private userService: UserService,
+    private router: Router) { }
 
   loginForm = this.formBuilder.group({
     email:['',[Validators.email,Validators.required]],
@@ -24,8 +26,10 @@ export class LoginComponent implements OnInit {
     let email = this.loginForm.controls["email"].value;
     let password = this.loginForm.controls["password"].value;
     this.userService.login(email, password).subscribe({
-      next: (v) => {
-        console.log(v);
+      next: (data:any) => {
+        //console.log(v);
+        localStorage.setItem("userInfo",JSON.stringify(data.dataSet));
+        this.router.navigate(["/user-management"]);
       },
       error: (e) => {
         console.error(e);

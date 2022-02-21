@@ -54,4 +54,11 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 40. Create a custom response model class ``ResponseModel.cs`` with ``Code``, ``Message``, ``DataSet`` properties.
 41. In user controller, return the ``ResponsModel`` in every methods.
 42. In login component modify ``onSubmit()`` method with user service.
-
+43. Create a user management component ``ng g c user-management --skip-tests`` with bootstrap table.
+44. Add user management route to ``app-routing.module.ts`` 
+45. Add user management routing in the nav bar.
+46. Create a ``user.ts`` and ``response-model.ts`` class.
+47. Add ``ResponseModel`` return type to all methods in user service class.
+48. Modify login component's ``onSubmit`` method with ``localStorage`` and ``router``.
+49. Add ``getAllUser`` method in user service with header.
+50. In user-management component call the ``getAllUser`` method to get the user list and bind the list to the bootstrap table in the html file.
