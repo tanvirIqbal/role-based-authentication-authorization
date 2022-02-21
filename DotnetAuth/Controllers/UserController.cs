@@ -27,42 +27,60 @@ namespace DotnetAuth.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JWTConfig _jwtConfig;
 
         public UserController(ILogger<UserController> logger,
         UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
-        IOptions<JWTConfig> jwtConfig)
+        IOptions<JWTConfig> jwtConfig,
+        RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtConfig = jwtConfig.Value;
+            _roleManager = roleManager;
         }
 
+        [Authorize()]
         [HttpPost("RegisterUser")]
-        public async Task<object> RegisterUser([FromBody] RegisterDTO userDTO)
+        public async Task<object> RegisterUser([FromBody] RegisterDTO registerDTO)
         {
             try
             {
+                if (string.IsNullOrEmpty(registerDTO.Email))
+                {
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Email is required.", null));
+                }
+                else if (string.IsNullOrEmpty(registerDTO.Password))
+                {
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Password is required.", null));
+                }
+                if (!await _roleManager.RoleExistsAsync(registerDTO.Role))
+                {
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Role does not exist.", null));
+                }
                 AppUser user = new AppUser();
-                user.FullName = userDTO.FullName;
-                user.UserName = userDTO.Email;
-                user.Email = userDTO.Email;
+                user.FullName = registerDTO.FullName;
+                user.UserName = registerDTO.Email;
+                user.Email = registerDTO.Email;
                 user.DateCreated = DateTime.Now;
                 user.DateModified = DateTime.Now;
 
-                IdentityResult result = await _userManager.CreateAsync(user, userDTO.Password);
+                IdentityResult result = await _userManager.CreateAsync(user, registerDTO.Password);
 
                 if (result.Succeeded)
                 {
-                    return await Task.FromResult(new ResponseModel(ResponseCode.Ok,"User has been created.",null));
+                    var tempUser = await _userManager.FindByEmailAsync(registerDTO.Email);
+                    await _userManager.AddToRoleAsync(tempUser, registerDTO.Role);
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "User has been created.", null));
                 }
-                return await Task.FromResult(new ResponseModel(ResponseCode.Error,string.Join(',', result.Errors.Select(x => x.Description).ToArray()),null));
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, string.Join(',', result.Errors.Select(x => x.Description).ToArray()), null));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(new ResponseModel(ResponseCode.Error,ex.Message,null));
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
             }
         }
 
@@ -74,11 +92,11 @@ namespace DotnetAuth.Controllers
             {
                 var users = _userManager.Users
                 .Select(x => new UserDTO(x.FullName, x.Email, x.UserName, x.DateCreated, x.DateModified));
-                return await Task.FromResult(new ResponseModel(ResponseCode.Ok,"Get All Users.",users));
+                return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Get All Users.", users));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(new ResponseModel(ResponseCode.Error,ex.Message,null));
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
             }
         }
 
@@ -89,11 +107,11 @@ namespace DotnetAuth.Controllers
             {
                 if (string.IsNullOrEmpty(loginDTO.Email))
                 {
-                    return await Task.FromResult(new ResponseModel(ResponseCode.Error,"Email is required.",null));
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Email is required.", null));
                 }
                 else if (string.IsNullOrEmpty(loginDTO.Password))
                 {
-                    return await Task.FromResult(new ResponseModel(ResponseCode.Error,"Password is required.",null));
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Password is required.", null));
                 }
 
                 Microsoft.AspNetCore.Identity.SignInResult result
@@ -102,21 +120,68 @@ namespace DotnetAuth.Controllers
                 if (result.Succeeded)
                 {
                     AppUser appUser = await _userManager.FindByEmailAsync(loginDTO.Email);
-                    UserDTO user = new UserDTO(appUser.FullName, appUser.Email,appUser.Email,appUser.DateCreated, appUser.DateModified);
+                    UserDTO user = new UserDTO(appUser.FullName, appUser.Email, appUser.Email, appUser.DateCreated, appUser.DateModified);
                     user.Token = GenerateToken(appUser);
-                    return await Task.FromResult(new ResponseModel(ResponseCode.Ok,"Login successfull.",user));
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Login successfull.", user));
                 }
-                return await Task.FromResult(new ResponseModel(ResponseCode.Ok,"Invalid Email or Password.",null));
+                return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Invalid Email or Password.", null));
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(new ResponseModel(ResponseCode.Ok,ex.Message,null));
+                return await Task.FromResult(new ResponseModel(ResponseCode.Ok, ex.Message, null));
+            }
+        }
+
+        [Authorize()]
+        [HttpPost("AddRole")]
+        public async Task<object> AddRole([FromBody] RoleDTO roleDTO)
+        {
+            try
+            {
+                if (roleDTO == null && string.IsNullOrEmpty(roleDTO.Name))
+                {
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Role is required.", null));
+                }
+                if (await _roleManager.RoleExistsAsync(roleDTO.Name))
+                {
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Role is already exist.", null));
+                }
+                IdentityRole role = new IdentityRole();
+                role.Name = roleDTO.Name;
+
+                IdentityResult result = await _roleManager.CreateAsync(role);
+
+                if (result.Succeeded)
+                {
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Role has been created.", null));
+                }
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, string.Join(',', result.Errors.Select(x => x.Description).ToArray()), null));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
+            }
+        }
+
+        [Authorize()]
+        [HttpGet("GetAllRole")]
+        public async Task<object> GetAllRole()
+        {
+            try
+            {
+                var roles = _roleManager.Roles
+                .Select(x => new RoleDTO(x.Name));
+                return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Get All Roles.", roles));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
             }
         }
 
         private string GenerateToken(AppUser user)
         {
-            
+
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtConfig.Key);
             var issuer = _jwtConfig.Issuer;
@@ -127,7 +192,8 @@ namespace DotnetAuth.Controllers
                 new Claim(ClaimTypes.GivenName, user.FullName)
             };
             var creds = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature);
-            SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor{
+            SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor
+            {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddHours(12),
                 SigningCredentials = creds,

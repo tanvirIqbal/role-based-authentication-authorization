@@ -70,3 +70,8 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 56. Use the auth guard service in the routing module.
 57. Add JWT as default authentication scheme at ``AddAuthentication`` method in the ``Startup.cs`` file 
 58. Change ``[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]`` to ``[Authorize()]`` in user controller.
+59. Add ``RoleDTO`` class.
+60. Inject ``RoleManager`` class in ``UserController``
+61. Add ``AddRole`` and ``GetAllRoles`` methods in ``UserController``.
+62. Add ``Role`` property in ``RegisterDTO``.
+63. Modify ``RegisterUser`` method in user controller class for register user with a role.
