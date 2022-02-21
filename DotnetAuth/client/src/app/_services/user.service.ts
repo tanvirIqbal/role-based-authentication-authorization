@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
+import { Constants } from '../_helpers/constants';
 import { ResponseCode } from '../_models/enums';
 import { ResponseModel } from '../_models/response-model';
 import { User } from '../_models/user';
@@ -29,7 +30,7 @@ export class UserService {
     return this.httpClient.post<ResponseModel>(this.baseUrl + "RegisterUser", body);
   }
   getAllUser() {
-    let userInfo = JSON.parse(localStorage.getItem("userInfo") || '{}');
+    let userInfo = JSON.parse(localStorage.getItem(Constants.USER_KEY) || '{}');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${userInfo?.token}`
     });

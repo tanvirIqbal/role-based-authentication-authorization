@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Constants } from './_helpers/constants';
 
 @Component({
   selector: 'app-root',
@@ -8,11 +9,11 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'WebAuth';
   onLogout() {
-    localStorage.removeItem("userInfo");
+    localStorage.removeItem(Constants.USER_KEY);
   }
 
   get isUserLoggedIn() {
-    const userInfo = localStorage.getItem("userInfo");
+    const userInfo = localStorage.getItem(Constants.USER_KEY);
     return userInfo && userInfo.length > 0;
   }
 }

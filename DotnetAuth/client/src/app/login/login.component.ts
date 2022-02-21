@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Constants } from '../_helpers/constants';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
     this.userService.login(email, password).subscribe({
       next: (data:any) => {
         //console.log(v);
-        localStorage.setItem("userInfo",JSON.stringify(data.dataSet));
+        localStorage.setItem(Constants.USER_KEY,JSON.stringify(data.dataSet));
         this.router.navigate(["/user-management"]);
       },
       error: (e) => {

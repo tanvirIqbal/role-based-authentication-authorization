@@ -64,3 +64,7 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 50. In user-management component call the ``getAllUser`` method to get the user list and bind the list to the bootstrap table in the html file.
 51. Add a ``Logout`` button in the nav bar and clear the ``localStorage`` and go to ``Login`` when the ``Logout`` button is clicked.
 52. Hide ``Register``, ``Logout`` and ``User Management`` button from the nav bar when user is logged out.
+53. Create a ``constants.ts`` helper class to hold the project's constants value. Right now it only holds ``userInfo``. 
+54. Replace the ``userInfo`` strings with ``USER_KEY`` constants from ``constants.ts`` helper class.
+55. Create a auth guard service ``ng g s auth-guard --skip-tests`` and implements ``CanActivate``. This service prevents user to access any route that he/she is not authorized.
+56. Use the auth guard service in the routing module.
