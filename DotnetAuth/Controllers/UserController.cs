@@ -66,7 +66,7 @@ namespace DotnetAuth.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize()]
         [HttpGet("GetAllUser")]
         public async Task<object> GetAllUser()
         {

@@ -68,3 +68,5 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 54. Replace the ``userInfo`` strings with ``USER_KEY`` constants from ``constants.ts`` helper class.
 55. Create a auth guard service ``ng g s auth-guard --skip-tests`` and implements ``CanActivate``. This service prevents user to access any route that he/she is not authorized.
 56. Use the auth guard service in the routing module.
+57. Add JWT as default authentication scheme at ``AddAuthentication`` method in the ``Startup.cs`` file 
+58. Change ``[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]`` to ``[Authorize()]`` in user controller.
