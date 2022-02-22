@@ -95,7 +95,31 @@ namespace DotnetAuth.Controllers
                 foreach (var user in users)
                 {
                     string role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-                    userDTOs.Add(new UserDTO(user.FullName,user.Email,user.Email,user.DateCreated,user.DateModified, role));
+                    userDTOs.Add(new UserDTO(user.FullName, user.Email, user.Email, user.DateCreated, user.DateModified, role));
+                }
+                return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Get All Users.", userDTOs));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult(new ResponseModel(ResponseCode.Error, ex.Message, null));
+            }
+        }
+
+        [Authorize()]
+        [HttpGet("GetUser")]
+        public async Task<object> GetUser()
+        {
+            try
+            {
+                List<UserDTO> userDTOs = new List<UserDTO>();
+                List<AppUser> users = _userManager.Users.ToList();
+                foreach (var user in users)
+                {
+                    string role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+                    if (role == "User")
+                    {
+                        userDTOs.Add(new UserDTO(user.FullName, user.Email, user.Email, user.DateCreated, user.DateModified, role));
+                    }
                 }
                 return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Get All Users.", userDTOs));
             }
