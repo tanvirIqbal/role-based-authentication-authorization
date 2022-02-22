@@ -84,7 +84,7 @@ namespace DotnetAuth.Controllers
             }
         }
 
-        [Authorize()]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllUser")]
         public async Task<object> GetAllUser()
         {
@@ -105,7 +105,7 @@ namespace DotnetAuth.Controllers
             }
         }
 
-        [Authorize()]
+        [Authorize(Roles = "User")]
         [HttpGet("GetUser")]
         public async Task<object> GetUser()
         {
@@ -151,7 +151,7 @@ namespace DotnetAuth.Controllers
                     AppUser appUser = await _userManager.FindByEmailAsync(loginDTO.Email);
                     string role = (await _userManager.GetRolesAsync(appUser)).FirstOrDefault();
                     UserDTO user = new UserDTO(appUser.FullName, appUser.Email, appUser.Email, appUser.DateCreated, appUser.DateModified, role);
-                    user.Token = GenerateToken(appUser);
+                    user.Token = GenerateToken(appUser, role);
                     return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Login successfull.", user));
                 }
                 return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Invalid Email or Password.", null));
@@ -162,7 +162,7 @@ namespace DotnetAuth.Controllers
             }
         }
 
-        [Authorize()]
+        [Authorize(Roles = "Admin")]
         [HttpPost("AddRole")]
         public async Task<object> AddRole([FromBody] RoleDTO roleDTO)
         {
@@ -193,7 +193,7 @@ namespace DotnetAuth.Controllers
             }
         }
 
-        [Authorize()]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetAllRole")]
         public async Task<object> GetAllRole()
         {
@@ -209,7 +209,7 @@ namespace DotnetAuth.Controllers
             }
         }
 
-        private string GenerateToken(AppUser user)
+        private string GenerateToken(AppUser user, string role)
         {
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -219,7 +219,8 @@ namespace DotnetAuth.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.FullName)
+                new Claim(ClaimTypes.GivenName, user.FullName),
+                new Claim(ClaimTypes.Role, role)
             };
             var creds = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature);
             SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor
