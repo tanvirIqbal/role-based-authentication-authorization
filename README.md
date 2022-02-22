@@ -75,3 +75,5 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 61. Add ``AddRole`` and ``GetAllRoles`` methods in ``UserController``.
 62. Add ``Role`` property in ``RegisterDTO``.
 63. Modify ``RegisterUser`` method in user controller class for register user with a role.
+64. Add ``Role`` property in UserDTO class.
+65. Modify GetAllUser and Login methods in the usercontroller to return user with role. (Single role).

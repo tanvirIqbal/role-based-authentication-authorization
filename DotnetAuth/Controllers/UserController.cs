@@ -90,9 +90,14 @@ namespace DotnetAuth.Controllers
         {
             try
             {
-                var users = _userManager.Users
-                .Select(x => new UserDTO(x.FullName, x.Email, x.UserName, x.DateCreated, x.DateModified));
-                return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Get All Users.", users));
+                List<UserDTO> userDTOs = new List<UserDTO>();
+                List<AppUser> users = _userManager.Users.ToList();
+                foreach (var user in users)
+                {
+                    string role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+                    userDTOs.Add(new UserDTO(user.FullName,user.Email,user.Email,user.DateCreated,user.DateModified, role));
+                }
+                return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Get All Users.", userDTOs));
             }
             catch (Exception ex)
             {
@@ -120,7 +125,8 @@ namespace DotnetAuth.Controllers
                 if (result.Succeeded)
                 {
                     AppUser appUser = await _userManager.FindByEmailAsync(loginDTO.Email);
-                    UserDTO user = new UserDTO(appUser.FullName, appUser.Email, appUser.Email, appUser.DateCreated, appUser.DateModified);
+                    string role = (await _userManager.GetRolesAsync(appUser)).FirstOrDefault();
+                    UserDTO user = new UserDTO(appUser.FullName, appUser.Email, appUser.Email, appUser.DateCreated, appUser.DateModified, role);
                     user.Token = GenerateToken(appUser);
                     return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Login successfull.", user));
                 }
