@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Constants } from '../_helpers/constants';
+import { ResponseModel } from '../_models/response-model';
+import { User } from '../_models/user';
 import { UserService } from '../_services/user.service';
 
 @Component({
@@ -27,10 +29,16 @@ export class LoginComponent implements OnInit {
     let email = this.loginForm.controls["email"].value;
     let password = this.loginForm.controls["password"].value;
     this.userService.login(email, password).subscribe({
-      next: (data:any) => {
+      next: (data:ResponseModel) => {
         //console.log(v);
+        let user = data.dataSet as User;
         localStorage.setItem(Constants.USER_KEY,JSON.stringify(data.dataSet));
-        this.router.navigate(["/user-management"]);
+        if (user.role == 'Admin') {
+          this.router.navigate(["/all-user-management"]);
+        } else {
+          this.router.navigate(["/user-management"]);
+        }
+        
       },
       error: (e) => {
         console.error(e);

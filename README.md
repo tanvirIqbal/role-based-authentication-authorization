@@ -86,3 +86,10 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 72. Modify ``onSubmit()`` in register component to register a user with role.
 73. Add ``clearControl()`` method to register component to clear control after the register is complete.
 74. Add Role in user management component.
+75. Create a all user management component ``ng g c all-user-management --skip-tests`` with same design as user management page.
+76. user ``getAllUser()`` methods to get all user. 
+77. Add all user management route to ``app-routing.module.ts`` 
+78. Add all user management routing in the nav bar.
+79. Modify ``onSubmit()`` in login component to go to different page according to different role after login.
+80. Add ``Admin`` in ``getUsers()``'s authorize attribute in user controller.
+81. Show hide menu according to role by adding ``isAdmin`` and ``isUser`` properties in app component ts file.

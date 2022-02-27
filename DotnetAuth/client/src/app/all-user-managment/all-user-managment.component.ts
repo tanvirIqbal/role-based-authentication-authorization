@@ -3,11 +3,12 @@ import { User } from '../_models/user';
 import { UserService } from '../_services/user.service';
 
 @Component({
-  selector: 'app-user-management',
-  templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.scss']
+  selector: 'app-all-user-managment',
+  templateUrl: './all-user-managment.component.html',
+  styleUrls: ['./all-user-managment.component.scss']
 })
-export class UserManagementComponent implements OnInit {
+export class AllUserManagmentComponent implements OnInit {
+
   userList: User[] = [];
   constructor(private userService: UserService) { }
 
@@ -15,7 +16,7 @@ export class UserManagementComponent implements OnInit {
     this.getUsers();
   }
   getUsers() {
-    this.userService.getUsers().subscribe({
+    this.userService.getAllUser().subscribe({
       next: (data: User[]) => {
         //console.log(v);
         this.userList = data;
@@ -28,4 +29,5 @@ export class UserManagementComponent implements OnInit {
       }
     });
   }
+
 }

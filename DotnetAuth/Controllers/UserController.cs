@@ -105,7 +105,7 @@ namespace DotnetAuth.Controllers
             }
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User, Admin")]
         [HttpGet("GetUsers")]
         public async Task<object> GetUser()
         {

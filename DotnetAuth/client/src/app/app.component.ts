@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Constants } from './_helpers/constants';
+import { User } from './_models/user';
 
 @Component({
   selector: 'app-root',
@@ -15,5 +16,19 @@ export class AppComponent {
   get isUserLoggedIn() {
     const userInfo = localStorage.getItem(Constants.USER_KEY);
     return userInfo && userInfo.length > 0;
+  }
+
+  get user(): User {
+    const user = localStorage.getItem(Constants.USER_KEY) ? JSON.parse(localStorage.getItem(Constants.USER_KEY) || "") as User
+    : new User("","","","");
+    return user;
+  }
+
+  get isAdmin() {
+    return this.user.role == 'Admin';
+  }
+
+  get isUser() {
+    return this.user.role == 'User';
   }
 }
