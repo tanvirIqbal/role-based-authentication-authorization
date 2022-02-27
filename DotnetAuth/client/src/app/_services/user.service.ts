@@ -41,7 +41,7 @@ export class UserService {
       if (res.code == ResponseCode.Ok) {
         if (res.dataSet) {
           res.dataSet.map((x: User) => {
-            userList.push(new User(x.fullName, x.email, x.userName));
+            userList.push(new User(x.fullName, x.email, x.userName, x.role));
           })
         }
       }
@@ -59,7 +59,7 @@ export class UserService {
       if (res.code == ResponseCode.Ok) {
         if (res.dataSet) {
           res.dataSet.map((x: User) => {
-            userList.push(new User(x.fullName, x.email, x.userName));
+            userList.push(new User(x.fullName, x.email, x.userName, x.role));
           })
         }
       }

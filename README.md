@@ -84,3 +84,5 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 70. Add ``getAllRoles`` and ``getUsers`` methods in user service.
 71. Get all role in the register component and bind them to radio button
 72. Modify ``onSubmit()`` in register component to register a user with role.
+73. Add ``clearControl()`` method to register component to clear control after the register is complete.
+74. Add Role in user management component.

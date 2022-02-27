@@ -30,7 +30,8 @@ export class RegisterComponent implements OnInit {
     let role = this.roles.filter(x=>x.isSelected)[0].name;
     this.userService.register(fullName, email, password,role).subscribe({
       next: (v) => {
-        console.log(v);
+        //console.log(v);
+        this.clearControl();
       },
       error: (e) => {
         console.error(e);
@@ -40,6 +41,13 @@ export class RegisterComponent implements OnInit {
       }
     })
     console.log("Register.");
+  }
+
+  clearControl() {
+    this.registerForm.controls["fullName"].setValue("");
+    this.registerForm.controls["email"].setValue("");
+    this.registerForm.controls["password"].setValue("");
+    this.roles.forEach(x => x.isSelected = false);
   }
 
   getAllRole() {
