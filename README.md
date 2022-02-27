@@ -80,3 +80,7 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 66. Create ``GetUsers`` method in ``usercontroller`` to return only users.
 67. Add role in ``GenerateToken`` methods
 68. Add ``Roles`` attribute in the necessary methods in ``usercontroller``
+69. Add radio button for roles in register component html.
+70. Add ``getAllRoles`` and ``getUsers`` methods in user service.
+71. Get all role in the register component and bind them to radio button
+72. Modify ``onSubmit()`` in register component to register a user with role.

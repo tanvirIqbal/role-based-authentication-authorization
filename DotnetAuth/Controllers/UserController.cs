@@ -43,7 +43,7 @@ namespace DotnetAuth.Controllers
             _roleManager = roleManager;
         }
 
-        [Authorize()]
+        //[Authorize(Roles = "Admin")]
         [HttpPost("RegisterUser")]
         public async Task<object> RegisterUser([FromBody] RegisterDTO registerDTO)
         {
@@ -106,7 +106,7 @@ namespace DotnetAuth.Controllers
         }
 
         [Authorize(Roles = "User")]
-        [HttpGet("GetUser")]
+        [HttpGet("GetUsers")]
         public async Task<object> GetUser()
         {
             try

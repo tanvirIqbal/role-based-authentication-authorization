@@ -4,6 +4,7 @@ import { map } from 'rxjs';
 import { Constants } from '../_helpers/constants';
 import { ResponseCode } from '../_models/enums';
 import { ResponseModel } from '../_models/response-model';
+import { Role } from '../_models/role';
 import { User } from '../_models/user';
 
 @Injectable({
@@ -21,11 +22,12 @@ export class UserService {
     }
     return this.httpClient.post<ResponseModel>(this.baseUrl + "Login", body);
   }
-  register(fullName: string, email: string, password: string) {
+  register(fullName: string, email: string, password: string, role: string) {
     const body = {
       FullName: fullName,
       Email: email,
-      Password: password
+      Password: password,
+      Role: role
     }
     return this.httpClient.post<ResponseModel>(this.baseUrl + "RegisterUser", body);
   }
@@ -44,6 +46,42 @@ export class UserService {
         }
       }
       return userList;
+    }));
+  }
+
+  getUsers() {
+    let userInfo = JSON.parse(localStorage.getItem(Constants.USER_KEY) || '{}');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${userInfo?.token}`
+    });
+    return this.httpClient.get<ResponseModel>(this.baseUrl + "GetUsers", { headers: headers }).pipe(map(res => {
+      let userList = new Array<User>();
+      if (res.code == ResponseCode.Ok) {
+        if (res.dataSet) {
+          res.dataSet.map((x: User) => {
+            userList.push(new User(x.fullName, x.email, x.userName));
+          })
+        }
+      }
+      return userList;
+    }));
+  }
+
+  getAllRole() {
+    let userInfo = JSON.parse(localStorage.getItem(Constants.USER_KEY) || '{}');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${userInfo?.token}`
+    });
+    return this.httpClient.get<ResponseModel>(this.baseUrl + "GetAllRole", { headers: headers }).pipe(map(res => {
+      let roleList = new Array<Role>();
+      if (res.code == ResponseCode.Ok) {
+        if (res.dataSet) {
+          res.dataSet.map((x: Role) => {
+            roleList.push(new Role(x.name));
+          })
+        }
+      }
+      return roleList;
     }));
   }
 }
