@@ -102,8 +102,8 @@ namespace DotnetAuth.Controllers
                 List<AppUser> users = _userManager.Users.ToList();
                 foreach (var user in users)
                 {
-                    string role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-                    userDTOs.Add(new UserDTO(user.FullName, user.Email, user.Email, user.DateCreated, user.DateModified, role));
+                    List<string> roles = (await _userManager.GetRolesAsync(user)).ToList();
+                    userDTOs.Add(new UserDTO(user.FullName, user.Email, user.Email, user.DateCreated, user.DateModified, roles));
                 }
                 return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Get All Users.", userDTOs));
             }
@@ -123,10 +123,10 @@ namespace DotnetAuth.Controllers
                 List<AppUser> users = _userManager.Users.ToList();
                 foreach (var user in users)
                 {
-                    string role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
-                    if (role == "User")
+                    List<string> roles = (await _userManager.GetRolesAsync(user)).ToList();
+                    if (roles.Any(x => x == "User"))
                     {
-                        userDTOs.Add(new UserDTO(user.FullName, user.Email, user.Email, user.DateCreated, user.DateModified, role));
+                        userDTOs.Add(new UserDTO(user.FullName, user.Email, user.Email, user.DateCreated, user.DateModified, roles));
                     }
                 }
                 return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Get All Users.", userDTOs));
@@ -157,9 +157,9 @@ namespace DotnetAuth.Controllers
                 if (result.Succeeded)
                 {
                     AppUser appUser = await _userManager.FindByEmailAsync(loginDTO.Email);
-                    string role = (await _userManager.GetRolesAsync(appUser)).FirstOrDefault();
-                    UserDTO user = new UserDTO(appUser.FullName, appUser.Email, appUser.Email, appUser.DateCreated, appUser.DateModified, role);
-                    user.Token = GenerateToken(appUser, role);
+                    List<string> roles = (await _userManager.GetRolesAsync(appUser)).ToList();
+                    UserDTO user = new UserDTO(appUser.FullName, appUser.Email, appUser.Email, appUser.DateCreated, appUser.DateModified, roles);
+                    user.Token = GenerateToken(appUser, roles);
                     return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Login successfull.", user));
                 }
                 return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "Invalid Email or Password.", null));
@@ -217,7 +217,7 @@ namespace DotnetAuth.Controllers
             }
         }
 
-        private string GenerateToken(AppUser user, string role)
+        private string GenerateToken(AppUser user, List<string> roles)
         {
 
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -228,8 +228,12 @@ namespace DotnetAuth.Controllers
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.GivenName, user.FullName),
-                new Claim(ClaimTypes.Role, role)
+                
             };
+            foreach (string role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
             var creds = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature);
             SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor
             {
