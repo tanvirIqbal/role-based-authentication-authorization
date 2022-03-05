@@ -93,3 +93,5 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 79. Modify ``onSubmit()`` in login component to go to different page according to different role after login.
 80. Add ``Admin`` in ``getUsers()``'s authorize attribute in user controller.
 81. Show hide menu according to role by adding ``isAdmin`` and ``isUser`` properties in app component ts file.
+82. Rename the ``Role`` property to ``Roles`` and make it a list type in ``RegisterDTO``
+83. Modify the register method in the user controller for registering user with multiple roles.

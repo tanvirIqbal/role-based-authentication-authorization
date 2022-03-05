@@ -57,10 +57,14 @@ namespace DotnetAuth.Controllers
                 {
                     return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Password is required.", null));
                 }
-                if (!await _roleManager.RoleExistsAsync(registerDTO.Role))
+                foreach (string role in registerDTO.Roles)
                 {
-                    return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Role does not exist.", null));
+                    if (!await _roleManager.RoleExistsAsync(role))
+                    {
+                        return await Task.FromResult(new ResponseModel(ResponseCode.Error, role + " role does not exist.", null));
+                    }
                 }
+
                 AppUser user = new AppUser();
                 user.FullName = registerDTO.FullName;
                 user.UserName = registerDTO.Email;
@@ -73,7 +77,11 @@ namespace DotnetAuth.Controllers
                 if (result.Succeeded)
                 {
                     var tempUser = await _userManager.FindByEmailAsync(registerDTO.Email);
-                    await _userManager.AddToRoleAsync(tempUser, registerDTO.Role);
+                    foreach (string role in registerDTO.Roles)
+                    {
+                        await _userManager.AddToRoleAsync(tempUser, role);
+                    }
+
                     return await Task.FromResult(new ResponseModel(ResponseCode.Ok, "User has been created.", null));
                 }
                 return await Task.FromResult(new ResponseModel(ResponseCode.Error, string.Join(',', result.Errors.Select(x => x.Description).ToArray()), null));
