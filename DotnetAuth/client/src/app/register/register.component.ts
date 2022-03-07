@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ResponseCode } from '../_models/enums';
+import { ResponseModel } from '../_models/response-model';
 import { Role } from '../_models/role';
 import { UserService } from '../_services/user.service';
 
@@ -9,7 +11,7 @@ import { UserService } from '../_services/user.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  roles:Role[] = [];
+  roles: Role[] = [];
   constructor(private formBuilder: FormBuilder,
     private userService: UserService) { }
 
@@ -27,11 +29,14 @@ export class RegisterComponent implements OnInit {
     let fullName = this.registerForm.controls["fullName"].value;
     let email = this.registerForm.controls["email"].value;
     let password = this.registerForm.controls["password"].value;
-    let role = this.roles.filter(x=>x.isSelected)[0].name;
-    this.userService.register(fullName, email, password,role).subscribe({
-      next: (v) => {
+    let role = this.roles.filter(x => x.isSelected).map(x => x.name);
+    this.userService.register(fullName, email, password, role).subscribe({
+      next: (v: ResponseModel) => {
         //console.log(v);
-        this.clearControl();
+        if (v.code == ResponseCode.Ok) {
+          this.clearControl();
+        }
+
       },
       error: (e) => {
         console.error(e);
@@ -64,10 +69,15 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  onRoleChange(role:string) {
-    this.roles.forEach(x=>{
-      x.isSelected = x.name == role;
+  onRoleChange(role: string) {
+    this.roles.forEach(x => {
+      if (x.name == role) {
+        x.isSelected = !x.isSelected;
+      }
     })
   }
 
+  get isRoleSelected() {
+    return this.roles.filter(x => x.isSelected == true).length > 0;
+  }
 }

@@ -20,12 +20,12 @@
                         <div class="mb-3">
                             <label class="form-label">Role</label>
                             <div class="form-check" *ngFor="let role of roles; let index = index">
-                                <input class="form-check-input" type="radio" [checked]="role.isSelected" (change)="onRoleChange(role.name)" name="role" id="{{index}}">
+                                <input class="form-check-input" type="checkbox" [checked]="role.isSelected" (change)="onRoleChange(role.name)" name="role" id="{{index}}">
                                 <label class="form-check-label" for="{{index}}">{{role.name}}</label>
                             </div>
 
                         </div>
-                        <button type="submit" class="btn btn-primary" [disabled]="!registerForm.valid">Register</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="!registerForm.valid || !isRoleSelected">Register</button>
                     </form>
                 </div>
             </div>

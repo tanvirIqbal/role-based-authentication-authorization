@@ -13,32 +13,32 @@ import { UserService } from '../_services/user.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private formBuilder:FormBuilder,
+  constructor(private formBuilder: FormBuilder,
     private userService: UserService,
     private router: Router) { }
 
   loginForm = this.formBuilder.group({
-    email:['',[Validators.email,Validators.required]],
-    password:['',Validators.required]
+    email: ['', [Validators.email, Validators.required]],
+    password: ['', Validators.required]
   });
 
   ngOnInit(): void {
   }
 
-  onSubmit(){
+  onSubmit() {
     let email = this.loginForm.controls["email"].value;
     let password = this.loginForm.controls["password"].value;
     this.userService.login(email, password).subscribe({
-      next: (data:ResponseModel) => {
+      next: (data: ResponseModel) => {
         //console.log(v);
         let user = data.dataSet as User;
-        localStorage.setItem(Constants.USER_KEY,JSON.stringify(data.dataSet));
-        if (user.role == 'Admin') {
+        localStorage.setItem(Constants.USER_KEY, JSON.stringify(data.dataSet));
+        if (user.roles.indexOf('Admin') > -1) {
           this.router.navigate(["/all-user-management"]);
         } else {
           this.router.navigate(["/user-management"]);
         }
-        
+
       },
       error: (e) => {
         console.error(e);

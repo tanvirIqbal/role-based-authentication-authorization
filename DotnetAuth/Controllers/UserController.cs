@@ -49,6 +49,10 @@ namespace DotnetAuth.Controllers
         {
             try
             {
+                if (registerDTO.Roles == null)
+                {
+                    return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Role is missing.", null));
+                }
                 if (string.IsNullOrEmpty(registerDTO.Email))
                 {
                     return await Task.FromResult(new ResponseModel(ResponseCode.Error, "Email is required.", null));

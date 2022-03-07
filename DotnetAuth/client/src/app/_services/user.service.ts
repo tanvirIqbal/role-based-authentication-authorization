@@ -22,12 +22,12 @@ export class UserService {
     }
     return this.httpClient.post<ResponseModel>(this.baseUrl + "Login", body);
   }
-  register(fullName: string, email: string, password: string, role: string) {
+  register(fullName: string, email: string, password: string, roles: string[]) {
     const body = {
       FullName: fullName,
       Email: email,
       Password: password,
-      Role: role
+      Roles: roles
     }
     return this.httpClient.post<ResponseModel>(this.baseUrl + "RegisterUser", body);
   }
@@ -41,7 +41,7 @@ export class UserService {
       if (res.code == ResponseCode.Ok) {
         if (res.dataSet) {
           res.dataSet.map((x: User) => {
-            userList.push(new User(x.fullName, x.email, x.userName, x.role));
+            userList.push(new User(x.fullName, x.email, x.userName, x.roles));
           })
         }
       }
@@ -59,7 +59,7 @@ export class UserService {
       if (res.code == ResponseCode.Ok) {
         if (res.dataSet) {
           res.dataSet.map((x: User) => {
-            userList.push(new User(x.fullName, x.email, x.userName, x.role));
+            userList.push(new User(x.fullName, x.email, x.userName, x.roles));
           })
         }
       }

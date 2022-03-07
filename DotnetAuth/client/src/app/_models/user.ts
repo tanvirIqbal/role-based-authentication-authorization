@@ -2,15 +2,15 @@ export class User {
     fullName: string = '';
     email: string = '';
     userName: string = '';
-    role: string = '';
+    roles: string[] = [];
 
     /**
      *
      */
-    constructor(fullName: string, email: string, userName: string, role: string) {
+    constructor(fullName: string, email: string, userName: string, roles: string[]) {
         this.fullName = fullName;
         this.email = email;
         this.userName = userName;
-        this.role = role;
+        this.roles = roles;
     }
 }

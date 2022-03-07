@@ -12,7 +12,7 @@ export class AuthGuardService implements CanActivate {
   constructor(private router: Router) { }
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const user = localStorage.getItem(Constants.USER_KEY) ? JSON.parse(localStorage.getItem(Constants.USER_KEY) || "") as User
-    : new User("","","","");
+    : new User("","","",[]);
 
     if (user.email) {
       return true; 

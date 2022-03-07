@@ -97,3 +97,4 @@ Install entity framework 'ef' tools globally  ``dotnet tool install --global dot
 83. Modify the register method in the user controller for registering user with multiple roles.
 84. Rename the ``Role`` property to ``Roles`` and make it a list type in ``UserDTO``
 85. Modify the ``GenerateToken``, ``Login``, ``GetUsers``, ``GetAllUser`` methods in the user controller for user with multiple roles.
+86. Modify angular part to register and show with multiple roles.

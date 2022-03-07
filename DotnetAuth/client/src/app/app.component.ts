@@ -20,15 +20,15 @@ export class AppComponent {
 
   get user(): User {
     const user = localStorage.getItem(Constants.USER_KEY) ? JSON.parse(localStorage.getItem(Constants.USER_KEY) || "") as User
-    : new User("","","","");
+    : new User("","","",[]);
     return user;
   }
 
   get isAdmin() {
-    return this.user.role == 'Admin';
+    return this.user.roles.indexOf('Admin') > -1;
   }
 
   get isUser() {
-    return this.user.role == 'User';
+    return this.user.roles.indexOf('User') > -1 && !this.isAdmin;
   }
 }
